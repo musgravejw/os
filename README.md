@@ -1,2 +1,2 @@
 # os
-Custom OS written from scratch
+Custom OS written from scratch.
