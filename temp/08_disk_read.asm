@@ -1,12 +1,5 @@
-
-
 DISK_ERROR: db "Disk read error", 0
 SECTORS_ERROR: db "Incorrect number of sectors read", 0
-
-%include "print_string.asm"
-
-
-
 
 ; load 'dh' sectors from drive 'dl' into ES:BX
 disk_load:
@@ -35,7 +28,6 @@ disk_load:
     jne sectors_error
     popa
     ret
-
 
 disk_error:
     mov bx, DISK_ERROR
@@ -73,10 +65,10 @@ disk_loop:
     jmp $
 
 ; Magic number
-times 510 - ($-$$) db 0
-dw 0xaa55
+;times 510 - ($-$$) db 0
+;dw 0xaa55
 
 ; boot sector = sector 1 of cyl 0 of head 0 of hdd 0
 ; from now on = sector 2 ...
-times 256 dw 0xdada ; sector 2 = 512 bytes
-times 256 dw 0xface ; sector 3 = 512 bytes
+;times 256 dw 0xdada ; sector 2 = 512 bytes
+;times 256 dw 0xface ; sector 3 = 512 bytes
