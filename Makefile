@@ -1,47 +1,46 @@
-# Build the kernel binary
-#kernel.bin: kernel_entry.o kernel.o
-#	ld -o kernel.bin -Ttext 0x1000 kernel_entry.o kernel.o --oformat binary
-# Build the kernel object file
-#kernel.o : kernel.c
-#	gcc -ffreestanding -c kernel.c -o kernel.o
-# Build the kernel entry object file.
-#kernel_entry.o : kernel_entry.asm
-#	nasm kernel_entry.asm -f elf -o kernel_entry.o
-
-
-# $^ is substituted with all of the target’s dependancy files
-
-
-# Automatically generate lists of sources using wildcards. C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
 HEADERS = $(wildcard kernel/*.h drivers/*.h)
-# TODO: Make sources dep on all header files.
-# Convert the *.c filenames to *.o to give a list of object files to build
+# Nice syntax for file extension replacement
 OBJ = ${C_SOURCES:.c=.o}
-# Defaul build target
-all: os-image
-# Run bochs to simulate booting of our code.
-run: all 
-	bochs
-# This is the actual disk image that the computer loads,
-# which is the combination of our compiled bootsector and kernel 
-os-image: boot_sect.bin kernel.bin
-	cat $^ > os-image
-#This builds the binary of our kernel from two object files: - the kernel_entry, which jumps to main() in our kernel
-#- the compiled C kernel
-kernel.bin: kernel/kernel_entry.o ${OBJ}
-	ld -o $@ -Ttext 0x1000 $^ --oformat binary
-	
-# Generic rule for compiling C code to an object file
-# For simplicity, we C files depend on all header files. 
-%.o : %.c ${HEADERS}
-	gcc -ffreestanding -c $< -o $@
 
-# Assemble the kernel_entry.
-%.o : %.asm
+# Change this if your cross-compiler is somewhere else
+CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
+GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
+# -g: Use debugging symbols in gcc
+CFLAGS = -g
+
+# First rule is run by default
+os-image.bin: boot/bootsect.bin kernel.bin
+	cat $^ > os-image.bin
+
+# '--oformat binary' deletes all symbols as a collateral, so we don't need
+# to 'strip' them manually on this case
+kernel.bin: boot/kernel_entry.o ${OBJ}
+	i386-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
+
+# Used for debugging purposes
+kernel.elf: boot/kernel_entry.o ${OBJ}
+	i386-elf-ld -o $@ -Ttext 0x1000 $^ 
+
+run: os-image.bin
+	qemu-system-i386 -fda os-image.bin
+
+# Open the connection to qemu and load our kernel-object file with symbols
+debug: os-image.bin kernel.elf
+	qemu-system-i386 -s -fda os-image.bin &
+	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
+
+# Generic rules for wildcards
+# To make an object, always compile from its .c
+%.o: %.c ${HEADERS}
+	${CC} ${CFLAGS} -ffreestanding -c $< -o $@
+
+%.o: %.asm
 	nasm $< -f elf -o $@
-%. bin : %. asm
-	nasm $< -f bin -I ’../../16bit/’ -o $@
+
+%.bin: %.asm
+	nasm $< -f bin -o $@
+
 clean:
-	rm -fr *.bin *.dis *.o os-image
-	rm -fr kernel/*.o boot/*.bin drivers/*.o
-	
+	rm -rf *.bin *.dis *.o os-image.bin *.elf
+	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o

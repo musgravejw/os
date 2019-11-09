@@ -5,5 +5,5 @@ objdump -d basic.o
 ld -o basic.bin -Ttext 0x0 --oformat binary basic.o
 ndisasm -b 32 basic.bin > basic.dis
 nasm kernel entry.asm -f elf -o kernel entry.o
-ld -o kernel.bin -Ttext 0x1000 kernel entry.o kernel.o --oformat binary
+ld -o kernel.bin -Ttext 0x1000 boot/kernel_entry.o kernel.o --oformat binary
 cat boot sect.bin kernel.bin > os-image

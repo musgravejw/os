@@ -1,15 +1,28 @@
 # os
-Custom OS written from scratch.
+Custom OS written from scratch.  Heavily based on Nick Blundell's tutorial "Writing a Simple Operating System From Scratch".
 
+```
 .
 ├── Makefile
 ├── README.md
 ├── boot
+│   ├── 32bit_print.asm
+│   ├── bootsect.asm
+│   ├── disk.asm
+│   ├── gdt.asm
+│   ├── kernel_entry.asm
+│   ├── print.asm
+│   ├── print_hex.asm
+│   └── switch_pm.asm
 ├── drivers
+│   ├── ports.h
+│   ├── screen.c
+│   └── screen.h
 ├── kernel
+│   ├── kernel.c
+│   └── util.h
 └── temp
     ├── 01_boot_sect.asm
-    ├── 01_boot_sect.bin
     ├── 01_kernel.c
     ├── 02_hello_world.asm
     ├── 03_allocate_char.asm
@@ -21,11 +34,8 @@ Custom OS written from scratch.
     ├── 09_gdt.asm
     ├── 10_32bit_protected_mode.asm
     ├── 11_kernel.asm
-    ├── kernel.bin
-    ├── kernel.o
     ├── notes
-    ├── os-image
     └── print_string.asm
 
-4 directories, 20 files
-
+4 directories, 33 files
+```
