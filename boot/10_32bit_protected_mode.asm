@@ -43,8 +43,8 @@ init_pm: ; we are now using 32-bit instructions
 MSG_REAL_MODE db "Started in 16-bit real mode", 0
 MSG_PROT_MODE db "Loaded 32-bit protected mode", 0
 
-%include "print_string.asm"
-%include "09_gdt.asm"
+%include "boot/print_string.asm"
+%include "boot/09_gdt.asm"
 
 ; bootsector
 ;times 510-($-$$) db 0

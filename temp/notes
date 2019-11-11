@@ -1,9 +1,0 @@
- nasm 10_32bit_protected_mode.asm -f bin -o 10_32bit_protected_mode.bin
- bochs -q 'boot:a' 'floppya: 1_44=10_32bit_protected_mode.bin, status=inserted'
-gcc -ffreestanding -c basic.c -o basic.o
-objdump -d basic.o
-ld -o basic.bin -Ttext 0x0 --oformat binary basic.o
-ndisasm -b 32 basic.bin > basic.dis
-nasm kernel entry.asm -f elf -o kernel entry.o
-ld -o kernel.bin -Ttext 0x1000 boot/kernel_entry.o kernel.o --oformat binary
-cat boot sect.bin kernel.bin > os-image
