@@ -23,6 +23,11 @@ Custom OS written from scratch.  Heavily based on Nick Blundell's tutorial "Writ
 │   ├── bootsect.asm
 │   ├── kernel_entry.asm
 │   └── print_string.asm
+├── cpu
+│   ├── idt.h
+│   ├── interrupt.asm
+│   ├── isr.h
+│   └── types.h
 ├── drivers
 │   ├── ports.c
 │   ├── ports.h
@@ -30,7 +35,8 @@ Custom OS written from scratch.  Heavily based on Nick Blundell's tutorial "Writ
 │   └── screen.h
 └── kernel
     ├── kernel.c
+    ├── util.c
     └── util.h
 
-4 directories, 24 files
+5 directories, 29 files
 ```
