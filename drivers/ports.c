@@ -1,5 +1,3 @@
-#include "ports.h"
-
 /**
  * Read a byte from the specified port
  */
