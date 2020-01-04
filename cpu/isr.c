@@ -1,5 +1,7 @@
 #include "isr.h"
 #include "idt.h"
+#include "timer.h"
+#include "../drivers/keyboard.h"
 
 isr_t interrupt_handlers[256];
 
@@ -42,6 +44,7 @@ void isr_install() {
     set_idt(); // Load with ASM
 }
 
+
 /* To print the message which defines every exception */
 char *exception_messages[] = {
     "Division By Zero",
@@ -81,6 +84,7 @@ char *exception_messages[] = {
     "Reserved"
 };
 
+
 void isr_handler(registers_t r) {
     kprint("received interrupt: ");
     char s[3];
@@ -91,9 +95,11 @@ void isr_handler(registers_t r) {
     kprint("\n");
 }
 
+
 void register_interrupt_handler(u8 n, isr_t handler) {
     interrupt_handlers[n] = handler;
 }
+
 
 void irq_handler(registers_t r) {
     /* After every interrupt we need to send an EOI to the PICs
@@ -106,4 +112,14 @@ void irq_handler(registers_t r) {
         isr_t handler = interrupt_handlers[r.int_no];
         handler(r);
     }
+}
+
+
+void irq_install() {
+    /* Enable interruptions */
+    asm volatile("sti");
+    /* IRQ0: timer */
+    init_timer(50);
+    /* IRQ1: keyboard */
+    init_keyboard();
 }

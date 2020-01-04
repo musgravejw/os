@@ -1,13 +1,21 @@
 #include "../cpu/isr.h"
-#include "../cpu/timer.h"
-#include "../drivers/keyboard.h"
+#include "../drivers/screen.h"
+#include "../libc/string.h"
 
 void __kernel_main() {
     isr_install();
+    irq_install();
 
-    asm volatile("sti");
-    init_timer(50);
-    /* Comment out the timer IRQ handler to read
-     * the keyboard IRQs easier */
-    init_keyboard();
+    kprint("Type something, it will go through the kernel\n"
+        "Type END to halt the CPU\n> ");
+}
+
+void user_input(char *input) {
+    if (strcmp(input, "END") == 0) {
+        kprint("Stopping the CPU. Bye!\n");
+        asm volatile("hlt");
+    }
+    kprint("You said: ");
+    kprint(input);
+    kprint("\n> ");
 }

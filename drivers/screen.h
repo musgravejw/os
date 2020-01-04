@@ -1,8 +1,8 @@
 #ifndef SCREEN
 #define SCREEN
 
-#include "ports.h"
-#include "../kernel/util.h"
+#include "../drivers/ports.h"
+#include "../libc/mm.h"
 
 #define VIDEO_ADDRESS 0xb8000
 #define MAX_ROWS 25
@@ -151,4 +151,3 @@ int get_offset_row(int offset) { return offset / (2 * MAX_COLS); }
 int get_offset_col(int offset) { return (offset - (get_offset_row(offset)*2*MAX_COLS))/2; }
 
 #endif
-

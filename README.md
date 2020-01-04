@@ -3,6 +3,7 @@ Custom OS written from scratch.  Heavily based on Nick Blundell's tutorial "Writ
 
 ```
 .
+├── LICENSE
 ├── Makefile
 ├── README.md
 ├── bin
@@ -26,17 +27,22 @@ Custom OS written from scratch.  Heavily based on Nick Blundell's tutorial "Writ
 ├── cpu
 │   ├── idt.h
 │   ├── interrupt.asm
+│   ├── isr.c
 │   ├── isr.h
+│   ├── timer.h
 │   └── types.h
 ├── drivers
-│   ├── ports.c
+│   ├── keyboard.h
 │   ├── ports.h
-│   ├── screen.c
 │   └── screen.h
-└── kernel
-    ├── kernel.c
-    ├── util.c
-    └── util.h
+├── kernel
+│   ├── kernel.c
+│   └── output
+└── libc
+    ├── function.h
+    ├── mm.h
+    └── string.h
 
-5 directories, 29 files
+6 directories, 33 files
+
 ```

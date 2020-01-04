@@ -2,7 +2,6 @@
 #define IDT
 
 #include "../cpu/types.h"
-#include "../kernel/util.h"
 
 /* Segment selectors */
 #define KERNEL_CS 0x08
@@ -49,4 +48,3 @@ void set_idt() {
 }
 
 #endif
-
