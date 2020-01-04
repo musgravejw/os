@@ -1,4 +1,7 @@
-#include "types.h"
+#ifndef IDT
+#define IDT
+
+#include "../cpu/types.h"
 #include "../kernel/util.h"
 
 /* Segment selectors */
@@ -44,3 +47,6 @@ void set_idt() {
     /* Don't make the mistake of loading &idt -- always load &idt_reg */
     __asm__ __volatile__("lidt (%0)" : : "r" (&idt_reg));
 }
+
+#endif
+
