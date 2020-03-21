@@ -98,6 +98,7 @@ global isr28
 global isr29
 global isr30
 global isr31
+
 ; IRQs
 global irq0
 global irq1
